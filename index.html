@@ -28,12 +28,10 @@
       --surface: #fff;
       --surface2: #f0f2f8;
       --border: #e2e6f0;
-      /* ORANGE theme for products/buttons/etc */
       --accent: #ff6b2b;
       --accent2: #ff9f43;
       --accent-dark: #e05520;
       --accent-light: #fff3ee;
-      /* GREEN only for header/FAB/bottom-nav */
       --green: #1e5c2a;
       --green2: #2d7a3a;
       --green3: #4caf60;
@@ -117,9 +115,6 @@
       display: flex !important;
     }
 
-    /* ============================
-       TOP HEADER — GREEN bg
-    ============================ */
     .top-header {
       position: sticky;
       top: 0;
@@ -128,11 +123,7 @@
       background: var(--green);
       border-bottom: 1px solid rgba(255, 255, 255, .1);
       box-shadow: 0 2px 16px rgba(0, 0, 0, .2);
-
-      /* existing */
       transition: background .3s ease, box-shadow .3s ease;
-
-      /* 🔥 ADD THESE (बस ये add करो) */
       transform: translateZ(0);
       will-change: transform;
       backface-visibility: hidden;
@@ -144,15 +135,12 @@
       justify-content: space-between;
       padding: .55rem 1rem .4rem;
       overflow: hidden;
-
       transition: transform .25s ease, opacity .25s ease;
       transform: translateY(0);
       opacity: 1;
-
       will-change: transform;
     }
 
-    /* 🔥 ONLY THIS KEEP */
     .top-header.scrolled .brand-bar {
       display: none;
     }
@@ -161,13 +149,6 @@
       padding-top: 0 !important;
       min-height: 0 !important;
     }
-
-    .top-header.scrolled .brand-bar {
-      display: none;
-      /* 💥 gap remove */
-    }
-
-
 
     .brand-logo-area {
       display: flex;
@@ -197,7 +178,6 @@
       line-height: 1.1;
     }
 
-    /* MART in orange as per image */
     .brand-name .mart-part {
       color: var(--accent2);
     }
@@ -272,7 +252,6 @@
       background: rgba(255, 255, 255, .25);
     }
 
-    /* SEARCH BAR — inside green header */
     .search-bar-wrap {
       padding: .45rem 1rem .6rem;
       background: var(--green);
@@ -392,7 +371,6 @@
       font-size: .75rem;
     }
 
-    /* SEARCH ACTIVE INDICATOR */
     .search-active-indicator {
       background: rgba(255, 255, 255, .15);
       border: 1px solid rgba(255, 255, 255, .2);
@@ -418,9 +396,6 @@
       font-size: .7rem;
     }
 
-    /* ============================
-       BOTTOM NAV — GREEN bg (as per image)
-    ============================ */
     .bottom-nav {
       position: fixed;
       bottom: 0;
@@ -435,8 +410,6 @@
       align-items: center;
       justify-content: space-around;
       padding: 0 .5rem;
-
-      /* 🔥 बस ये 3 line ADD करो */
       transform: translateZ(0);
       will-change: transform;
       backface-visibility: hidden;
@@ -496,9 +469,6 @@
       display: flex;
     }
 
-    /* ============================
-       BANNER — ORANGE (old style)
-    ============================ */
     .banner {
       background: linear-gradient(135deg, var(--accent), var(--accent2));
       padding: 1.2rem 1.5rem;
@@ -539,7 +509,6 @@
       color: var(--text);
     }
 
-    /* CATEGORY SCROLL */
     .cat-scroll {
       display: flex;
       gap: .7rem;
@@ -604,7 +573,6 @@
       color: var(--accent);
     }
 
-    /* PRODUCTS */
     .products-section {
       padding: 0 1rem;
     }
@@ -767,7 +735,6 @@
       text-decoration: line-through;
     }
 
-    /* ADD TO CART BUTTON — ORANGE */
     .add-btn {
       width: 100%;
       padding: 10px;
@@ -816,7 +783,6 @@
       transform: translate(-50%, -5px);
     }
 
-    /* OFFER BANNER */
     .banners-wrap {
       padding: .8rem 1rem 0;
     }
@@ -850,7 +816,6 @@
       transform: scale(0.98);
     }
 
-    /* DETAIL PAGE */
     #product-page {
       padding: 0;
     }
@@ -1146,7 +1111,6 @@
       line-height: 1.6;
     }
 
-    /* CART */
     #cart-page {
       padding: 0;
     }
@@ -1316,7 +1280,6 @@
       transition: .2s;
     }
 
-    /* CHECKOUT */
     #checkout-page {
       padding: 0;
     }
@@ -1582,7 +1545,6 @@
       display: block;
     }
 
-    /* PLACE ORDER BUTTON — ORANGE */
     .place-order-btn {
       width: 100%;
       padding: .9rem;
@@ -1603,7 +1565,6 @@
       transition: .2s;
     }
 
-    /* ORDERS */
     #orders-page {
       padding: 0;
     }
@@ -1720,7 +1681,6 @@
       margin-top: 0;
     }
 
-    /* TRACK MODAL */
     .track-modal {
       position: fixed;
       inset: 0;
@@ -1808,7 +1768,6 @@
       margin-top: .1rem;
     }
 
-    /* SUCCESS */
     .success-anim {
       font-size: 5rem;
       animation: bounceIn .6s;
@@ -1840,7 +1799,6 @@
       margin: 1rem 0;
     }
 
-    /* PROFILE */
     #profile-page {
       padding: 0;
     }
@@ -2006,7 +1964,6 @@
       margin-top: .5rem;
     }
 
-    /* REGISTRATION — ORANGE */
     .reg-overlay {
       position: fixed;
       inset: 0;
@@ -2053,7 +2010,6 @@
       margin-bottom: 1.2rem;
     }
 
-    /* EDIT PROFILE */
     .edit-overlay {
       position: fixed;
       inset: 0;
@@ -2077,7 +2033,6 @@
       overflow-y: auto;
     }
 
-    /* DP MODAL */
     .dp-overlay {
       position: fixed;
       inset: 0;
@@ -2150,7 +2105,6 @@
       margin-top: 1rem;
     }
 
-    /* TOAST */
     .toast {
       position: fixed;
       bottom: calc(var(--bottom-h) + 1rem);
@@ -2186,7 +2140,6 @@
       background: var(--danger);
     }
 
-    /* EMPTY */
     .empty {
       text-align: center;
       padding: 3rem 1rem;
@@ -2207,7 +2160,6 @@
       margin-bottom: .3rem;
     }
 
-    /* SPINNER */
     .spinner {
       width: 28px;
       height: 28px;
@@ -2230,7 +2182,6 @@
       color: var(--muted);
     }
 
-    /* HAMBURGER MENU */
     .hamburger-menu {
       position: fixed;
       left: 0;
@@ -2357,7 +2308,6 @@
       color: white;
     }
 
-    /* STATIC PAGES */
     #about-page .page-header,
     #contact-page .page-header,
     #privacy-page .page-header,
@@ -2451,9 +2401,6 @@
       color: var(--muted);
     }
 
-    /* ============================
-       OFFER FAB — GREEN (as per image)
-    ============================ */
     #offer-fab {
       position: fixed;
       bottom: 90px;
@@ -2470,19 +2417,12 @@
       display: none;
       z-index: 999;
       box-shadow: 0 10px 25px rgba(30, 92, 42, .5);
-
-      /* 🔥 CHANGE THIS */
       transition: transform .2s ease, opacity .2s ease;
-
-      /* 🔥 ADD THESE */
       transform: translateZ(0);
       will-change: transform;
       backface-visibility: hidden;
     }
 
-    /* ============================
-       CHAT PAGE — GREEN header (as per image 2)
-    ============================ */
     #chat-page .chat-page-header {
       flex-shrink: 0;
       padding: .9rem 1rem;
@@ -2541,7 +2481,6 @@
       box-shadow: 0 0 0 3px rgba(45, 122, 58, .1);
     }
 
-    /* OFFER ACTIVE */
     .offer-active {
       background: linear-gradient(135deg, #f3e8ff, #ede9fe);
       transition: .3s;
@@ -2618,14 +2557,12 @@
           <p>Welcome to Rakesh Mart - your trusted online grocery store.</p>
           <p>Rakesh Mart is an online grocery delivery service operating in <strong>Pali, Rajasthan</strong>.</p>
         </div>
-
         <div class="page-section">
           <h3><i class="fa fa-bullseye"></i> Hamara Mission</h3>
           <p>✔ Fresh aur original grocery products deliver karna</p>
           <p>✔ Customers ko fair price dena</p>
           <p>✔ Fast aur reliable delivery provide karna</p>
         </div>
-
         <div class="page-section">
           <h3><i class="fa fa-credit-card"></i> Payment Methods</h3>
           <p>Hum following payment methods accept karte hain:</p>
@@ -2635,12 +2572,10 @@
             <li>Cash on Delivery (COD)</li>
           </ul>
         </div>
-
         <div class="page-section">
           <h3><i class="fa fa-location-dot"></i> Delivery Area</h3>
           <p>Currently hum sirf <strong>Pali city area</strong> me delivery karte hain.</p>
         </div>
-
         <div class="page-section">
           <h3><i class="fa fa-truck"></i> Delivery</h3>
           <p><strong>₹99 se upar FREE Delivery</strong></p>
@@ -2663,7 +2598,6 @@
               <p><strong>+91 7742474578</strong></p>
             </div>
           </div>
-
           <p><strong>Working Hours:</strong> 9:00 AM – 9:00 PM</p>
         </div>
         <div class="contact-card">
@@ -2696,7 +2630,6 @@
           <h3>Privacy Policy</h3>
           <p>Rakesh Mart aapki privacy ko seriously leta hai.</p>
         </div>
-
         <div class="page-section">
           <h3>Data Collection</h3>
           <ul>
@@ -2706,12 +2639,10 @@
             <li>Payment details (processed securely via Razorpay)</li>
           </ul>
         </div>
-
         <div class="page-section">
           <h3>Data Usage</h3>
           <p>Collected data sirf order processing aur delivery ke liye use hota hai.</p>
         </div>
-
         <div class="page-section">
           <h3>Data Security</h3>
           <p>Hum third-party secure payment gateway (Razorpay) use karte hain.</p>
@@ -2730,7 +2661,6 @@
           <h3>Terms & Conditions</h3>
           <p>Rakesh Mart ka use karte time aap ye terms accept karte hain.</p>
         </div>
-
         <div class="page-section">
           <h3>Order Rules</h3>
           <ul>
@@ -2739,7 +2669,6 @@
             <li>Wrong details hone par order cancel ho sakta hai</li>
           </ul>
         </div>
-
         <div class="page-section">
           <h3>Payments</h3>
           <ul>
@@ -2747,7 +2676,6 @@
             <li>Online payments Razorpay ke through secure hote hain</li>
           </ul>
         </div>
-
         <div class="page-section">
           <h3>Delivery</h3>
           <ul>
@@ -2772,7 +2700,6 @@
             <li>30 minutes ke baad cancellation allowed nahi hai</li>
           </ul>
         </div>
-
         <div class="page-section">
           <h3>Refund Policy</h3>
           <ul>
@@ -2781,7 +2708,6 @@
             <li>Approved refund 5–7 working days me process hota hai</li>
           </ul>
         </div>
-
         <div class="page-section">
           <h3>Non-Refundable</h3>
           <ul>
@@ -2875,7 +2801,7 @@
       </div>
     </div>
 
-    <!-- TOP HEADER — GREEN with Rakesh MART logo -->
+    <!-- TOP HEADER -->
     <div class="top-header" id="main-top-header">
       <div class="brand-bar" id="brand-bar">
         <div class="brand-logo-area">
@@ -2928,7 +2854,6 @@
           </div>
         </div>
       </div>
-
       <div class="section-header">
         <h3><i class="fa fa-grid-2" style="color:var(--accent)"></i> <span id="cat-label">Categories</span></h3>
       </div>
@@ -2936,7 +2861,6 @@
         style="display:none;margin:10px 1rem;padding:6px 12px;border-radius:8px;border:none;background:var(--accent);color:#fff;font-weight:700;cursor:pointer;"><i
           class="fa fa-arrow-left"></i> Back</button>
       <div class="cat-scroll" id="cat-scroll"></div>
-
       <div class="products-section">
         <div class="section-title-bar"><i class="fa fa-store"></i> <span id="products-section-label">Hamare
             Products</span></div>
@@ -3076,7 +3000,7 @@
       </div>
     </div>
 
-    <!-- CHAT PAGE — GREEN header -->
+    <!-- CHAT PAGE -->
     <div id="chat-page" class="page">
       <div class="chat-page-header">
         <h2 style="font-size:1.1rem;font-weight:800;font-family:'Baloo 2',sans-serif;color:#fff">
@@ -3154,10 +3078,10 @@
       </div>
     </div>
 
-    <!-- OFFER FAB — GREEN -->
+    <!-- OFFER FAB -->
     <button id="offer-fab" onclick="goBackFromOffer()"><i class="fa fa-xmark"></i></button>
 
-    <!-- BOTTOM NAV — GREEN -->
+    <!-- BOTTOM NAV -->
     <nav class="bottom-nav">
       <button class="nav-tab active" id="tab-home" onclick="showTab('home')"><i class="fa fa-house tab-icon"></i><span
           class="tab-label" id="nav-home-txt">Home</span></button>
@@ -3188,6 +3112,9 @@
     var detailGalleryTimer = null;
     var pendingDPBase64 = null; var pendingDPMime = null;
 
+    // ✅ FIX: Order placing lock - duplicate order rokne ke liye
+    var isOrderPlacing = false;
+
     var CAT_ICONS = {
       'All': '<i class="fa fa-bag-shopping"></i>',
       'Chawal & Atta': '<i class="fa fa-wheat-awn"></i>',
@@ -3208,9 +3135,9 @@
     var catImageMap = {};
 
     var translations = {
-      hi: { processing: "प्रोसेस में", confirmed: "कन्फर्म", shipped: "भेज दिया", delivered: "डिलीवर", cancelled: "रद्द", cod: "नकद", upi: "UPI", track: "ट्रैक करो" },
-      hinglish: { processing: "Process ho raha hai", confirmed: "Confirm ho gaya", shipped: "Ship ho gaya", delivered: "Deliver ho gaya", cancelled: "Cancel ho gaya", cod: "Cash", upi: "UPI", track: "Track karo" },
-      en: { processing: "Processing", confirmed: "Confirmed", shipped: "Shipped", delivered: "Delivered", cancelled: "Cancelled", cod: "COD", upi: "UPI", track: "Track" }
+      hi: { processing: "प्रोसेस में", confirmed: "कन्फर्म", shipped: "भेज दिया", delivered: "डिलीवर", cancelled: "रद्द", cod: "नकद", upi: "UPI", online: "Online", track: "ट्रैक करो" },
+      hinglish: { processing: "Process ho raha hai", confirmed: "Confirm ho gaya", shipped: "Ship ho gaya", delivered: "Deliver ho gaya", cancelled: "Cancel ho gaya", cod: "Cash", upi: "UPI", online: "Online", track: "Track karo" },
+      en: { processing: "Processing", confirmed: "Confirmed", shipped: "Shipped", delivered: "Delivered", cancelled: "Cancelled", cod: "COD", upi: "UPI", online: "Online", track: "Track" }
     };
 
     var UI_TEXT = {
@@ -3280,12 +3207,10 @@
     }
 
     let ticking = false;
-
     window.addEventListener("scroll", () => {
       if (!ticking) {
         requestAnimationFrame(() => {
-          document.querySelector(".top-header")
-            .classList.toggle("scrolled", window.scrollY > 20);
+          document.querySelector(".top-header").classList.toggle("scrolled", window.scrollY > 20);
           ticking = false;
         });
         ticking = true;
@@ -3391,7 +3316,7 @@
         }).catch(function () { if (currentUser) { currentUser.dpUrl = 'data:' + pendingDPMime + ';base64,' + pendingDPBase64; localStorage.setItem('kiranaUser', JSON.stringify(currentUser)); updateProfileAvatar(currentUser.dpUrl); document.getElementById('dp-modal').classList.remove('open'); showToast('Photo locally save ho gayi', 'success'); } });
     }
 
-    function b64toBlob(b64Data, contentType, sliceSize) { contentType = contentType || ''; sliceSize = sliceSize || 512; var byteCharacters = atob(b64Data); var byteArrays = []; for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) { var slice = byteCharacters.slice(offset, offset + sliceSize); var byteNumbers = new Array(slice.length); for (var i = 0; i < slice.length; i++)byteNumbers[i] = slice.charCodeAt(i); byteArrays.push(new Uint8Array(byteNumbers)); } return new Blob(byteArrays, { type: contentType }); }
+    function b64toBlob(b64Data, contentType, sliceSize) { contentType = contentType || ''; sliceSize = sliceSize || 512; var byteCharacters = atob(b64Data); var byteArrays = []; for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) { var slice = byteCharacters.slice(offset, offset + sliceSize); var byteNumbers = new Array(slice.length); for (var i = 0; i < slice.length; i++) byteNumbers[i] = slice.charCodeAt(i); byteArrays.push(new Uint8Array(byteNumbers)); } return new Blob(byteArrays, { type: contentType }); }
     function saveDPToSheet(url) { postToSheet({ action: 'saveCustomerDP', phone: currentUser.phone, dpUrl: url }); }
     function removeDPPhoto() { if (currentUser) { currentUser.dpUrl = ''; localStorage.setItem('kiranaUser', JSON.stringify(currentUser)); saveDPToSheet(''); updateProfileAvatar(''); document.getElementById('dp-modal').classList.remove('open'); showToast('Photo hata di gayi', 'success'); } }
 
@@ -3401,32 +3326,19 @@
       else { img.style.display = 'none'; if (letter) { letter.style.display = ''; if (currentUser) letter.textContent = currentUser.fname.charAt(0).toUpperCase(); } }
     }
 
-    // ============================
-    // SCROLL BEHAVIOR — only brand-bar hides, search bar stays
-    // ============================
     function setupScrollBehavior() {
       var header = document.getElementById('main-top-header');
-      var lastScrollY = 0;
       window.addEventListener('scroll', function () {
-        var scrollY = window.scrollY;
-        if (scrollY > 60) { header.classList.add('scrolled'); }
+        if (window.scrollY > 60) { header.classList.add('scrolled'); }
         else { header.classList.remove('scrolled'); }
-        lastScrollY = scrollY;
       }, { passive: true });
     }
 
-    // ============================
-    // ANDROID BACK BUTTON — category pe ho to "All" pe wapas
-    // ============================
     window.addEventListener('popstate', function (e) {
       if (activeCategory !== 'All' && activeTab === 'home') {
-        e.preventDefault();
-        goBackFromOffer();
-        history.pushState(null, '', window.location.href);
+        e.preventDefault(); goBackFromOffer(); history.pushState(null, '', window.location.href);
       }
     });
-
-    // Push initial state
     history.pushState(null, '', window.location.href);
 
     // INIT
@@ -3499,9 +3411,6 @@
     var STATIC_PAGES = ['about', 'contact', 'privacy', 'terms', 'refund'];
     function showTab(tab) {
       if (tab === 'checkout') { showCheckout(); return; }
-      // ============================
-      // Home tab pe click => "All" category pe wapas
-      // ============================
       if (tab === 'home' && activeCategory !== 'All') {
         activeCategory = 'All';
         document.body.classList.remove('offer-active');
@@ -3669,7 +3578,7 @@
       if (!filtered.length) { grid.innerHTML = '<div class="empty" style="grid-column:1/-1"><i class="fa fa-magnifying-glass"></i><h3>Koi product nahi mila</h3></div>'; return; }
       var shownIds = {}; var unique = filtered.filter(function (p) { if (shownIds[p.id]) return false; shownIds[p.id] = true; return true; });
       grid.innerHTML = unique.map(function (p) {
-        var isOffer = activeCategory === '__OFFER__'; var stars = ''; for (var i = 0; i < Math.round(p.rating || 4); i++)stars += '★'; for (var i = Math.round(p.rating || 4); i < 5; i++)stars += '☆';
+        var isOffer = activeCategory === '__OFFER__'; var stars = ''; for (var i = 0; i < Math.round(p.rating || 4); i++) stars += '★'; for (var i = Math.round(p.rating || 4); i < 5; i++) stars += '☆';
         var firstImg = (p.img && p.img.startsWith && p.img.startsWith('http')) ? p.img : null; var imgHtml = '';
         if (firstImg) { imgHtml = '<img src="' + firstImg + '" onerror="this.outerHTML=\'<i class=fa fa-box style=font-size:3rem></i>\'" loading="lazy">'; }
         else { imgHtml = '<i class="fa fa-box" style="font-size:3rem;color:var(--muted)"></i>'; }
@@ -3687,7 +3596,7 @@
     function showProduct(id) {
       currentProductId = id; detailQty = 1;
       var p = products.find(function (x) { return x.id == id; }); if (!p) return;
-      var disc = p.orig ? Math.round((1 - p.price / p.orig) * 100) : 0; var stars = ''; for (var i = 0; i < Math.round(p.rating || 4); i++)stars += '★';
+      var disc = p.orig ? Math.round((1 - p.price / p.orig) * 100) : 0; var stars = ''; for (var i = 0; i < Math.round(p.rating || 4); i++) stars += '★';
       document.getElementById('detail-title').textContent = getName(p);
       galleryImages = [p.img, p.img2, p.img3, p.img4].filter(function (x) { return x && x.startsWith && x.startsWith('http'); }); galleryCurrentIndex = 0;
       var galleryHtml = '';
@@ -3713,7 +3622,7 @@
     function updateGallery() { var track = document.getElementById('gallery-track'); if (!track) return; track.style.transform = 'translateX(-' + galleryCurrentIndex + '00%)'; var dots = document.querySelectorAll('#gallery-dots .gallery-dot'); dots.forEach(function (d, i) { d.classList.toggle('active', i === galleryCurrentIndex); }); }
     function enableGallerySwipe() { var gallery = document.getElementById('detail-gallery'); if (!gallery) return; var startX = 0; gallery.addEventListener('touchstart', function (e) { startX = e.touches[0].clientX; }, { passive: true }); gallery.addEventListener('touchend', function (e) { var diff = startX - e.changedTouches[0].clientX; if (Math.abs(diff) > 40) changeSlide(diff > 0 ? 1 : -1); }, { passive: true }); }
     function changeQty(d) { detailQty = Math.max(1, detailQty + d); document.getElementById('qty-val').textContent = detailQty; }
-    function addToCartDetail() { for (var i = 0; i < detailQty; i++)addToCart(currentProductId, false); showToast(detailQty + ' item cart mein dala', 'success'); detailQty = 1; }
+    function addToCartDetail() { for (var i = 0; i < detailQty; i++) addToCart(currentProductId, false); showToast(detailQty + ' item cart mein dala', 'success'); detailQty = 1; }
     function buyNow() { addToCartDetail(); showTab('cart'); }
 
     // CART
@@ -3751,28 +3660,56 @@
         '<div style="height:80px"></div>';
     }
 
-    // CHECKOUT
+    // ✅ FIXED CHECKOUT - Har baar fresh state se start hoga
     function showCheckout() {
       if (!currentUser) { showToast('Pehle login karo', 'error'); return; }
       if (!cart.length) { showToast('Cart khali hai', 'error'); return; }
+
+      // ✅ FIX: isOrderPlacing reset karo checkout open hone par
+      isOrderPlacing = false;
+
       document.querySelectorAll('.page').forEach(function (p) { p.classList.remove('active'); });
       document.getElementById('checkout-page').classList.add('active');
       document.querySelectorAll('.nav-tab').forEach(function (t) { t.classList.remove('active'); });
       document.getElementById('main-top-header').style.display = ''; document.querySelector('.bottom-nav').style.display = ''; document.body.classList.remove('static-page-open');
+
       document.getElementById('co-name').textContent = (currentUser.fname + ' ' + (currentUser.lname || '')).trim();
-      document.getElementById('co-phone').textContent = currentUser.phone; document.getElementById('co-addr').textContent = currentUser.addr;
+      document.getElementById('co-phone').textContent = currentUser.phone;
+      document.getElementById('co-addr').textContent = currentUser.addr;
+
       renderCheckoutSummary();
-      var subtotal = cart.reduce(function (s, i) { return s + i.price * i.qty; }, 0); var delivery = subtotal >= 99 ? 0 : 20;
+
+      var subtotal = cart.reduce(function (s, i) { return s + i.price * i.qty; }, 0);
+      var delivery = subtotal >= 99 ? 0 : 20;
       currentCheckoutTotal = subtotal + delivery;
-      var amountEl = document.getElementById('upi-amount-display'); if (amountEl) amountEl.textContent = '₹' + currentCheckoutTotal;
-      upiAppClicked = false; document.querySelectorAll('.upi-app-btn').forEach(function (b) { b.classList.remove('upi-clicked'); });
+
+      // ✅ FIX: UPI amount update karo
+      var amountEl = document.getElementById('upi-amount-display');
+      if (amountEl) amountEl.textContent = '₹' + currentCheckoutTotal;
+
+      // ✅ FIX: Poori UPI state reset karo
+      upiAppClicked = false;
+      document.querySelectorAll('.upi-app-btn').forEach(function (b) { b.classList.remove('upi-clicked'); });
       var cb = document.getElementById('upi-paid-check'); if (cb) cb.checked = false;
       var doneBox = document.getElementById('upi-done-box'); if (doneBox) doneBox.style.display = 'none';
       var hint = document.getElementById('upi-fail-hint'); if (hint) hint.classList.remove('show');
       var upiIdInput = document.getElementById('upi-id'); if (upiIdInput) upiIdInput.value = '';
-      var placeBtn = document.getElementById('place-btn'); if (placeBtn) { placeBtn.disabled = false; placeBtn.innerHTML = '<i class="fa fa-party-horn"></i> <span id="place-order-txt">' + t('place_order') + '</span>'; }
-      selectPayment('upi'); renderUPIApps(currentCheckoutTotal, 'PENDING'); window.scrollTo(0, 0);
+
+      // ✅ FIX: Place button reset karo - fresh state
+      var placeBtn = document.getElementById('place-btn');
+      if (placeBtn) {
+        placeBtn.disabled = false;
+        placeBtn.innerHTML = '<i class="fa fa-party-horn"></i> <span id="place-order-txt">' + t('place_order') + '</span>';
+      }
+
+      // ✅ FIX: Payment method reset karo UPI pe
+      selectedPayment = 'upi';
+      selectPayment('upi');
+      renderUPIApps(currentCheckoutTotal, 'PENDING');
+
+      window.scrollTo(0, 0);
     }
+
     function renderCheckoutSummary() {
       var subtotal = cart.reduce(function (s, i) { return s + i.price * i.qty; }, 0); var delivery = subtotal >= 99 ? 0 : 20;
       document.getElementById('checkout-summary').innerHTML =
@@ -3780,6 +3717,7 @@
         '<div class="sum-row"><span><i class="fa fa-truck"></i> ' + t('delivery') + '</span><span>' + (delivery === 0 ? t('free_del') : '₹' + delivery) + '</span></div>' +
         '<div class="sum-row total"><span>' + t('grand_total') + '</span><span style="color:var(--accent)">₹' + (subtotal + delivery) + '</span></div>';
     }
+
     function selectPayment(type) {
       selectedPayment = type;
       ['cod', 'upi', 'online', 'razorpay'].forEach(function (t) { var el = document.getElementById('pay-' + t); if (el) el.classList.remove('active'); });
@@ -3787,30 +3725,99 @@
       var upiField = document.getElementById('upi-field'); if (upiField) upiField.style.display = (type === 'upi') ? 'block' : 'none';
       if (type !== 'upi') upiAppClicked = false;
     }
+
     function handleRazorpay(btn) {
-      var options = { key: "YOUR_RAZORPAY_KEY", amount: currentCheckoutTotal * 100, currency: "INR", name: "Rakesh Mart", description: "Order Payment", handler: function (response) { showToast('Payment successful!', 'success'); completeOrder('razorpay'); }, modal: { ondismiss: function () { btn.innerHTML = '<i class="fa fa-party-horn"></i> ' + t('place_order'); btn.disabled = false; showToast('Payment cancelled', 'error'); } } };
+      var options = {
+        key: "YOUR_RAZORPAY_KEY", amount: currentCheckoutTotal * 100, currency: "INR", name: "Rakesh Mart", description: "Order Payment",
+        handler: function (response) { showToast('Payment successful!', 'success'); completeOrder('razorpay'); },
+        modal: { ondismiss: function () { btn.innerHTML = '<i class="fa fa-party-horn"></i> ' + t('place_order'); btn.disabled = false; isOrderPlacing = false; showToast('Payment cancelled', 'error'); } }
+      };
       var rzp = new Razorpay(options); rzp.open();
     }
+
+    // ✅ FULLY FIXED placeOrder - Multiple orders bina refresh ke kaam karenge
     function placeOrder() {
+      // ✅ FIX 1: Agar already placing hai to duplicate mat karo
+      if (isOrderPlacing) {
+        showToast('Order place ho raha hai, thoda wait karo...', 'error');
+        return;
+      }
+
       var btn = document.getElementById('place-btn');
-      if (selectedPayment === 'upi') { if (!upiAppClicked) { showToast('Pehle koi UPI app select karo', 'error'); return; } var cb = document.getElementById('upi-paid-check'); if (!cb || !cb.checked) { showToast('Payment ke baad checkbox tick karo', 'error'); return; } }
+
+      // ✅ FIX 2: UPI check
+      if (selectedPayment === 'upi') {
+        if (!upiAppClicked) { showToast('Pehle koi UPI app select karo', 'error'); return; }
+        var cb = document.getElementById('upi-paid-check');
+        if (!cb || !cb.checked) { showToast('Payment ke baad checkbox tick karo', 'error'); return; }
+      }
+
+      // ✅ FIX 3: Razorpay
       if (selectedPayment === 'razorpay') { handleRazorpay(btn); return; }
-      var originalBtnHTML = '<i class="fa fa-party-horn"></i> <span id="place-order-txt">' + t('place_order') + '</span>';
-      btn.innerHTML = '<div class="spinner" style="width:20px;height:20px;border-width:2px"></div> Order ho raha hai...'; btn.disabled = true;
-      var subtotal = cart.reduce(function (s, i) { return s + i.price * i.qty; }, 0); var delivery = subtotal >= 99 ? 0 : 20;
-      var orderId = 'ORD-' + Math.floor(1000000 + Math.random() * 9000000); currentOrderId = orderId;
+
+      // ✅ FIX 4: Cart dobara check karo
+      if (!cart.length) { showToast('Cart khali hai, pehle items dalo', 'error'); return; }
+
+      // ✅ FIX 5: Lock lagao
+      isOrderPlacing = true;
+
+      btn.innerHTML = '<div class="spinner" style="width:20px;height:20px;border-width:2px"></div> Order ho raha hai...';
+      btn.disabled = true;
+
+      var subtotal = cart.reduce(function (s, i) { return s + i.price * i.qty; }, 0);
+      var delivery = subtotal >= 99 ? 0 : 20;
+      var orderId = 'ORD-' + Math.floor(1000000 + Math.random() * 9000000);
+      currentOrderId = orderId;
       var fullName = (currentUser.fname + ' ' + (currentUser.lname || '')).trim();
-      var order = { id: orderId, date: new Date().toLocaleString('en-IN'), customer: fullName, phone: currentUser.phone, addr: currentUser.addr, items: cart.map(function (i) { return { name: i.name, name_hi: i.name_hi, name_en: i.name_en, cat: i.cat, qty: i.qty, price: i.price, total: i.price * i.qty }; }), subtotal: subtotal, delivery: delivery, total: subtotal + delivery, payment: selectedPayment, status: 'processing', isNew: true, timeline: [{ key: 'order_placed', time: new Date().toLocaleString('en-IN'), done: true, active: false }, { key: 'confirmed', time: 'pending', done: false, active: true }, { key: 'shipped', time: 'pending', done: false, active: false }, { key: 'out_for_delivery', time: 'pending', done: false, active: false }, { key: 'delivered', time: 'pending', done: false, active: false }] };
-      orders.unshift(order); localStorage.setItem('kiranaOrders', JSON.stringify(orders));
+
+      var order = {
+        id: orderId,
+        date: new Date().toLocaleString('en-IN'),
+        customer: fullName,
+        phone: currentUser.phone,
+        addr: currentUser.addr,
+        items: cart.map(function (i) { return { name: i.name, name_hi: i.name_hi, name_en: i.name_en, cat: i.cat, qty: i.qty, price: i.price, total: i.price * i.qty }; }),
+        subtotal: subtotal,
+        delivery: delivery,
+        total: subtotal + delivery,
+        payment: selectedPayment,
+        status: 'processing',
+        isNew: true,
+        timeline: [
+          { key: 'order_placed', time: new Date().toLocaleString('en-IN'), done: true, active: false },
+          { key: 'confirmed', time: 'pending', done: false, active: true },
+          { key: 'shipped', time: 'pending', done: false, active: false },
+          { key: 'out_for_delivery', time: 'pending', done: false, active: false },
+          { key: 'delivered', time: 'pending', done: false, active: false }
+        ]
+      };
+
+      // ✅ FIX 6: Orders array mein add karo
+      orders.unshift(order);
+      localStorage.setItem('kiranaOrders', JSON.stringify(orders));
+
+      // ✅ FIX 7: Sheet pe save karo
       postToSheet({ action: 'saveOrder', order: order });
-      cart = []; localStorage.setItem('kiranaCart', JSON.stringify(cart)); updateCartBadges();
-      upiAppClicked = false; selectedPayment = 'upi';
-      var upiCb = document.getElementById('upi-paid-check'); if (upiCb) upiCb.checked = false;
-      var upiDoneBox = document.getElementById('upi-done-box'); if (upiDoneBox) upiDoneBox.style.display = 'none';
-      var upiHint = document.getElementById('upi-fail-hint'); if (upiHint) upiHint.classList.remove('show');
-      btn.innerHTML = originalBtnHTML; btn.disabled = false;
-      document.getElementById('success-order-id').textContent = orderId; showTab('success');
+
+      // ✅ FIX 8: Cart clear karo - IMPORTANT
+      cart = [];
+      localStorage.setItem('kiranaCart', JSON.stringify(cart));
+      updateCartBadges();
+
+      // ✅ FIX 9: Success order ID set karo
+      document.getElementById('success-order-id').textContent = orderId;
+
+      // ✅ FIX 10: Lock unlock karo - agle order ke liye
+      isOrderPlacing = false;
+
+      // ✅ FIX 11: Button reset karo
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fa fa-party-horn"></i> <span id="place-order-txt">' + t('place_order') + '</span>';
+
+      // ✅ FIX 12: Success page dikhao
+      showTab('success');
     }
+
     function cancelOrder(orderId) {
       if (!confirm('Order cancel karna hai?')) return;
       var order = orders.find(function (o) { return o.id === orderId; }); if (!order) { showToast('Order nahi mila', 'error'); return; }
@@ -3851,8 +3858,13 @@
     }
     function loadOrdersFromSheet() {
       fetch(CONFIG.SCRIPT_URL + '?action=getOrders').then(function (res) { return res.json(); }).then(function (data) {
-        if (data.orders && data.orders.length) { var lo = JSON.parse(localStorage.getItem('kiranaOrders') || '[]'); orders = data.orders.map(function (so) { var l = lo.find(function (x) { return x.id === so.id; }); var m = l ? Object.assign({}, so, { items: l.items || so.items }) : so; m.timeline = getTimeline(so.status); return m; }); lo.forEach(function (lo) { if (!orders.find(function (o) { return o.id === lo.id; })) orders.unshift(lo); }); localStorage.setItem('kiranaOrders', JSON.stringify(orders)); }
-        else { var saved = localStorage.getItem('kiranaOrders'); if (saved) orders = JSON.parse(saved); } renderOrders();
+        if (data.orders && data.orders.length) {
+          var lo = JSON.parse(localStorage.getItem('kiranaOrders') || '[]');
+          orders = data.orders.map(function (so) { var l = lo.find(function (x) { return x.id === so.id; }); var m = l ? Object.assign({}, so, { items: l.items || so.items }) : so; m.timeline = getTimeline(so.status); return m; });
+          lo.forEach(function (lo) { if (!orders.find(function (o) { return o.id === lo.id; })) orders.unshift(lo); });
+          localStorage.setItem('kiranaOrders', JSON.stringify(orders));
+        } else { var saved = localStorage.getItem('kiranaOrders'); if (saved) orders = JSON.parse(saved); }
+        renderOrders();
       }).catch(function () { var saved = localStorage.getItem('kiranaOrders'); if (saved) orders = JSON.parse(saved); renderOrders(); });
     }
     function trackOrder(orderId) {
