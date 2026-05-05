@@ -17,6 +17,23 @@
   <meta name="apple-mobile-web-app-title" content="Rakesh Mart">
   <meta name="mobile-web-app-capable" content="yes">
   <!-- END PWA META TAGS -->
+
+  <!-- ✅ FIX: Page load hote hi check karo - agar user logged in hai to modal hide karo -->
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem('kiranaUser');
+        if (saved && JSON.parse(saved)) {
+          // User logged in hai - modal ko open mat karo
+          document.addEventListener('DOMContentLoaded', function () {
+            var modal = document.getElementById('reg-modal');
+            if (modal) modal.classList.remove('open');
+          });
+        }
+      } catch (e) { }
+    })();
+  </script>
+
   <link
     href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&family=Nunito:wght@400;500;600;700&display=swap"
     rel="stylesheet">
@@ -1286,6 +1303,7 @@
 
     .checkout-body {
       padding: 1rem;
+      padding-bottom: calc(var(--bottom-h) + 1rem);
     }
 
     .form-card {
@@ -1964,18 +1982,21 @@
       margin-top: .5rem;
     }
 
+    /* ✅ FIX: Registration modal default mein HIDDEN rahega */
     .reg-overlay {
       position: fixed;
       inset: 0;
       background: rgba(0, 0, 0, .6);
       z-index: 400;
       display: none;
+      /* ✅ Default hidden - JS khud dikhayega */
       align-items: flex-end;
       justify-content: center;
     }
 
     .reg-overlay.open {
       display: flex;
+      /* ✅ Sirf tab dikhega jab JS 'open' class lagaye */
     }
 
     .reg-sheet {
@@ -2497,8 +2518,9 @@
   <div id="main-wrap">
     <div class="toast" id="toast"></div>
 
-    <!-- REGISTRATION MODAL -->
-    <div class="reg-overlay open" id="reg-modal">
+    <!-- ✅ FIX: reg-overlay mein se 'open' class hatai - ab default hidden rahega -->
+    <!-- JS khud decide karega dikhana hai ya nahi window.onload mein -->
+    <div class="reg-overlay" id="reg-modal">
       <div class="reg-sheet">
         <div class="sheet-handle"></div>
         <div style="text-align:center;margin-bottom:.5rem">
@@ -2519,28 +2541,109 @@
       </div>
     </div>
 
-    <!-- DP MODAL -->
+    <!-- DP MODAL - FULL CROP FEATURE -->
     <div class="dp-overlay" id="dp-modal">
-      <div class="dp-sheet">
+      <div class="dp-sheet" style="max-height:92vh;overflow-y:auto;">
         <div class="sheet-handle"></div>
-        <div style="font-size:1.1rem;font-weight:800;margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem"><i
-            class="fa fa-image" style="color:var(--accent)"></i> Profile Photo</div>
-        <img id="dp-preview" src="" alt="Preview">
-        <div class="dp-options">
-          <label class="dp-option-btn" style="cursor:pointer">
-            <i class="fa fa-image"></i> Gallery se Photo Choose Karo
-            <input type="file" id="dp-file-input" accept="image/*" style="display:none" onchange="handleDPFile(event)">
-          </label>
-          <button class="dp-option-btn" onclick="removeDPPhoto()">
-            <i class="fa fa-trash" style="color:var(--danger)"></i> <span style="color:var(--danger)">Photo Hatao</span>
+
+        <!-- STEP 1: Choose Photo -->
+        <div id="dp-step1">
+          <div style="font-size:1.1rem;font-weight:800;margin-bottom:1rem;display:flex;align-items:center;gap:.5rem">
+            <i class="fa fa-image" style="color:var(--accent)"></i> Profile Photo
+          </div>
+          <div class="dp-options">
+            <label class="dp-option-btn" style="cursor:pointer;justify-content:center;">
+              <i class="fa fa-images"></i> Gallery se Photo Choose Karo
+              <input type="file" id="dp-file-input" accept="image/*" style="display:none"
+                onchange="handleDPFile(event)">
+            </label>
+            <button class="dp-option-btn" onclick="removeDPPhoto()" style="justify-content:center;">
+              <i class="fa fa-trash" style="color:var(--danger)"></i>
+              <span style="color:var(--danger)">Photo Hatao</span>
+            </button>
+          </div>
+          <button onclick="document.getElementById('dp-modal').classList.remove('open')"
+            style="width:100%;padding:.7rem;margin-top:.8rem;background:transparent;border:none;color:var(--muted);font-family:'Nunito',sans-serif;font-weight:700;cursor:pointer;font-size:.88rem;">
+            Wapas Jao
           </button>
         </div>
-        <div class="dp-actions">
-          <button onclick="document.getElementById('dp-modal').classList.remove('open')"
-            style="flex:1;padding:.75rem;background:transparent;border:2px solid var(--border);border-radius:12px;font-family:'Nunito',sans-serif;font-weight:700;cursor:pointer;color:var(--muted)">Wapas</button>
-          <button id="dp-save-btn" onclick="saveDPPhoto()"
-            style="flex:2;padding:.75rem;background:var(--accent);border:none;border-radius:12px;font-family:'Nunito',sans-serif;font-weight:800;cursor:pointer;color:#fff;display:none"><i
-              class="fa fa-check"></i> Save Karo</button>
+
+        <!-- STEP 2: Crop Photo -->
+        <div id="dp-step2" style="display:none;">
+          <div style="font-size:1.1rem;font-weight:800;margin-bottom:.8rem;display:flex;align-items:center;gap:.5rem">
+            <i class="fa fa-crop" style="color:var(--accent)"></i> Photo Crop Karo
+          </div>
+
+          <!-- Shape Selector -->
+          <div style="display:flex;gap:.5rem;margin-bottom:.8rem;">
+            <button id="crop-circle-btn" onclick="setCropShape('circle')"
+              style="flex:1;padding:.55rem;border-radius:10px;border:2px solid var(--accent);background:var(--accent);color:#fff;font-family:'Nunito',sans-serif;font-weight:800;font-size:.8rem;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:.4rem;">
+              <i class="fa fa-circle"></i> Circle
+            </button>
+            <button id="crop-square-btn" onclick="setCropShape('square')"
+              style="flex:1;padding:.55rem;border-radius:10px;border:2px solid var(--border);background:var(--surface2);color:var(--muted);font-family:'Nunito',sans-serif;font-weight:800;font-size:.8rem;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:.4rem;">
+              <i class="fa fa-square"></i> Square
+            </button>
+          </div>
+
+          <!-- Crop Canvas Area -->
+          <div id="crop-container"
+            style="position:relative;width:100%;background:#111;border-radius:12px;overflow:hidden;touch-action:none;user-select:none;">
+            <canvas id="crop-canvas" style="display:block;width:100%;height:auto;"></canvas>
+            <!-- Overlay for crop area indicator -->
+            <div id="crop-overlay" style="position:absolute;inset:0;pointer-events:none;"></div>
+          </div>
+
+          <!-- Zoom Slider -->
+          <div style="margin:.8rem 0;display:flex;align-items:center;gap:.6rem;">
+            <i class="fa fa-magnifying-glass-minus" style="color:var(--muted);font-size:.85rem;"></i>
+            <input type="range" id="crop-zoom" min="1" max="3" step="0.01" value="1"
+              style="flex:1;accent-color:var(--accent);" oninput="onCropZoom()">
+            <i class="fa fa-magnifying-glass-plus" style="color:var(--muted);font-size:.85rem;"></i>
+          </div>
+          <p style="font-size:.72rem;color:var(--muted);text-align:center;margin-bottom:.8rem;">
+            <i class="fa fa-hand"></i> Drag karke position adjust karo • Zoom ke liye slider use karo
+          </p>
+
+          <div style="display:flex;gap:.6rem;">
+            <button onclick="goToDPStep1()"
+              style="flex:1;padding:.75rem;background:transparent;border:2px solid var(--border);border-radius:12px;font-family:'Nunito',sans-serif;font-weight:700;cursor:pointer;color:var(--muted);">
+              <i class="fa fa-arrow-left"></i> Wapas
+            </button>
+            <button onclick="applyCrop()"
+              style="flex:2;padding:.75rem;background:var(--accent);border:none;border-radius:12px;font-family:'Nunito',sans-serif;font-weight:800;cursor:pointer;color:#fff;">
+              <i class="fa fa-check"></i> Crop Karo
+            </button>
+          </div>
+        </div>
+
+        <!-- STEP 3: Preview & Save -->
+        <div id="dp-step3" style="display:none;">
+          <div style="font-size:1.1rem;font-weight:800;margin-bottom:.8rem;display:flex;align-items:center;gap:.5rem">
+            <i class="fa fa-eye" style="color:var(--accent)"></i> Preview
+          </div>
+          <div style="display:flex;justify-content:center;gap:1.2rem;margin-bottom:1rem;">
+            <div style="text-align:center;">
+              <img id="dp-preview-circle" src=""
+                style="width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid var(--accent);display:block;margin:0 auto .3rem;">
+              <span style="font-size:.65rem;color:var(--muted);font-weight:700;">Circle</span>
+            </div>
+            <div style="text-align:center;">
+              <img id="dp-preview-square" src=""
+                style="width:80px;height:80px;border-radius:10px;object-fit:cover;border:3px solid var(--border);display:block;margin:0 auto .3rem;">
+              <span style="font-size:.65rem;color:var(--muted);font-weight:700;">Square</span>
+            </div>
+          </div>
+          <div style="display:flex;gap:.6rem;">
+            <button onclick="goToDPStep2()"
+              style="flex:1;padding:.75rem;background:transparent;border:2px solid var(--border);border-radius:12px;font-family:'Nunito',sans-serif;font-weight:700;cursor:pointer;color:var(--muted);">
+              <i class="fa fa-arrow-left"></i> Dubara Crop
+            </button>
+            <button onclick="saveDPPhoto()"
+              style="flex:2;padding:.75rem;background:var(--accent);border:none;border-radius:12px;font-family:'Nunito',sans-serif;font-weight:800;cursor:pointer;color:#fff;">
+              <i class="fa fa-floppy-disk"></i> Save Karo
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -3110,9 +3213,7 @@
     var searchHistory = JSON.parse(localStorage.getItem('searchHistory') || '[]');
     var upiAppClicked = false; var currentCheckoutTotal = 0;
     var detailGalleryTimer = null;
-    var pendingDPBase64 = null; var pendingDPMime = null;
-
-    // ✅ FIX: Order placing lock - duplicate order rokne ke liye
+    var pendingDPBase64 = null; var pendingDPMime = null; // legacy - kept for compatibility
     var isOrderPlacing = false;
 
     var CAT_ICONS = {
@@ -3217,7 +3318,6 @@
       }
     });
 
-    // UPI
     function buildUPILink(app, amount, orderId) {
       var pa = UPI_CONFIG.merchantUPI; var pn = encodeURIComponent(UPI_CONFIG.merchantName); var am = amount.toFixed(2); var tn = encodeURIComponent('Order ' + orderId + ' - Rakesh Kirana'); var cu = 'INR';
       var baseLink = 'upi://pay?pa=' + pa + '&pn=' + pn + '&am=' + am + '&cu=' + cu + '&tn=' + tn;
@@ -3289,36 +3389,275 @@
     }
     function setLang(lang) { currentLang = lang; localStorage.setItem("lang", lang); updateLangButtons(); updateAllUIText(); renderCategories(); renderProducts(); }
 
-    // DP / PROFILE PHOTO
-    function openDPModal() { document.getElementById('dp-modal').classList.add('open'); pendingDPBase64 = null; pendingDPMime = null; document.getElementById('dp-save-btn').style.display = 'none'; var prev = document.getElementById('dp-preview'); prev.style.display = 'none'; }
+    // =============================================
+    // DP / PROFILE PHOTO - CROP SYSTEM
+    // =============================================
+    var cropImg = new Image();
+    var cropShape = 'circle'; // 'circle' or 'square'
+    var cropZoom = 1;
+    var cropOffsetX = 0, cropOffsetY = 0;
+    var cropDragging = false;
+    var cropDragStartX = 0, cropDragStartY = 0;
+    var cropDragOffsetStartX = 0, cropDragOffsetStartY = 0;
+    var cropCanvasSize = 300;
+    var croppedDataURL = null;
+
+    function openDPModal() {
+      document.getElementById('dp-modal').classList.add('open');
+      goToDPStep1();
+      // Reset file input so same file can be re-selected
+      var fi = document.getElementById('dp-file-input');
+      if (fi) fi.value = '';
+    }
+
+    function goToDPStep1() {
+      document.getElementById('dp-step1').style.display = '';
+      document.getElementById('dp-step2').style.display = 'none';
+      document.getElementById('dp-step3').style.display = 'none';
+    }
+    function goToDPStep2() {
+      document.getElementById('dp-step1').style.display = 'none';
+      document.getElementById('dp-step2').style.display = '';
+      document.getElementById('dp-step3').style.display = 'none';
+      initCropCanvas();
+    }
+    function goToDPStep3(dataURL) {
+      document.getElementById('dp-step1').style.display = 'none';
+      document.getElementById('dp-step2').style.display = 'none';
+      document.getElementById('dp-step3').style.display = '';
+      croppedDataURL = dataURL;
+      document.getElementById('dp-preview-circle').src = dataURL;
+      document.getElementById('dp-preview-square').src = dataURL;
+    }
 
     function handleDPFile(event) {
-      var file = event.target.files[0]; if (!file) return;
-      if (file.size > 5 * 1024 * 1024) { showToast('File 5MB se chhota hona chahiye', 'error'); return; }
+      var file = event.target.files[0];
+      if (!file) return;
+      if (file.size > 10 * 1024 * 1024) { showToast('File 10MB se chhota hona chahiye', 'error'); return; }
       var reader = new FileReader();
       reader.onload = function (e) {
-        pendingDPBase64 = e.target.result.split(',')[1]; pendingDPMime = file.type;
-        var preview = document.getElementById('dp-preview'); preview.src = e.target.result; preview.style.display = 'block';
-        document.getElementById('dp-save-btn').style.display = 'block';
-      }; reader.readAsDataURL(file);
+        cropImg = new Image();
+        cropImg.onload = function () {
+          cropZoom = 1;
+          cropOffsetX = 0;
+          cropOffsetY = 0;
+          document.getElementById('crop-zoom').value = 1;
+          goToDPStep2();
+        };
+        cropImg.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function setCropShape(shape) {
+      cropShape = shape;
+      var circBtn = document.getElementById('crop-circle-btn');
+      var sqBtn = document.getElementById('crop-square-btn');
+      if (shape === 'circle') {
+        circBtn.style.background = 'var(--accent)'; circBtn.style.color = '#fff'; circBtn.style.borderColor = 'var(--accent)';
+        sqBtn.style.background = 'var(--surface2)'; sqBtn.style.color = 'var(--muted)'; sqBtn.style.borderColor = 'var(--border)';
+      } else {
+        sqBtn.style.background = 'var(--accent)'; sqBtn.style.color = '#fff'; sqBtn.style.borderColor = 'var(--accent)';
+        circBtn.style.background = 'var(--surface2)'; circBtn.style.color = 'var(--muted)'; circBtn.style.borderColor = 'var(--border)';
+      }
+      drawCrop();
+    }
+
+    function initCropCanvas() {
+      var canvas = document.getElementById('crop-canvas');
+      var container = document.getElementById('crop-container');
+      var w = container.clientWidth || 300;
+      cropCanvasSize = w;
+      canvas.width = w;
+      canvas.height = w;
+      canvas.style.height = w + 'px';
+      drawCrop();
+      setupCropEvents(canvas);
+    }
+
+    function drawCrop() {
+      var canvas = document.getElementById('crop-canvas');
+      if (!canvas) return;
+      var ctx = canvas.getContext('2d');
+      var sz = cropCanvasSize;
+      var cropRadius = sz * 0.42;
+
+      ctx.clearRect(0, 0, sz, sz);
+
+      // Draw image
+      var iw = cropImg.naturalWidth, ih = cropImg.naturalHeight;
+      var scale = (Math.min(sz, sz) / Math.min(iw, ih)) * cropZoom;
+      var dw = iw * scale, dh = ih * scale;
+      var dx = (sz - dw) / 2 + cropOffsetX;
+      var dy = (sz - dh) / 2 + cropOffsetY;
+
+      ctx.drawImage(cropImg, dx, dy, dw, dh);
+
+      // Darkened overlay outside crop area
+      ctx.save();
+      ctx.fillStyle = 'rgba(0,0,0,0.55)';
+      ctx.fillRect(0, 0, sz, sz);
+
+      // Cut out crop shape (clear the overlay in crop area)
+      ctx.globalCompositeOperation = 'destination-out';
+      if (cropShape === 'circle') {
+        ctx.beginPath();
+        ctx.arc(sz / 2, sz / 2, cropRadius, 0, Math.PI * 2);
+        ctx.fill();
+      } else {
+        var sq = cropRadius * 1.42;
+        ctx.fillRect(sz / 2 - sq, sz / 2 - sq, sq * 2, sq * 2);
+      }
+      ctx.restore();
+
+      // Re-draw image inside crop area (sharp, above overlay)
+      ctx.save();
+      ctx.beginPath();
+      if (cropShape === 'circle') {
+        ctx.arc(sz / 2, sz / 2, cropRadius, 0, Math.PI * 2);
+      } else {
+        var sq2 = cropRadius * 1.42;
+        ctx.rect(sz / 2 - sq2, sz / 2 - sq2, sq2 * 2, sq2 * 2);
+      }
+      ctx.clip();
+      ctx.drawImage(cropImg, dx, dy, dw, dh);
+      ctx.restore();
+
+      // Border around crop area
+      ctx.save();
+      ctx.strokeStyle = '#fff';
+      ctx.lineWidth = 2.5;
+      if (cropShape === 'circle') {
+        ctx.beginPath();
+        ctx.arc(sz / 2, sz / 2, cropRadius, 0, Math.PI * 2);
+        ctx.stroke();
+      } else {
+        var sq3 = cropRadius * 1.42;
+        ctx.strokeRect(sz / 2 - sq3, sz / 2 - sq3, sq3 * 2, sq3 * 2);
+      }
+      ctx.restore();
+    }
+
+    function onCropZoom() {
+      cropZoom = parseFloat(document.getElementById('crop-zoom').value);
+      drawCrop();
+    }
+
+    function setupCropEvents(canvas) {
+      // Remove old listeners by cloning
+      var newCanvas = canvas.cloneNode(true);
+      canvas.parentNode.replaceChild(newCanvas, canvas);
+      newCanvas.id = 'crop-canvas';
+
+      // Mouse
+      newCanvas.addEventListener('mousedown', function (e) {
+        cropDragging = true;
+        cropDragStartX = e.clientX; cropDragStartY = e.clientY;
+        cropDragOffsetStartX = cropOffsetX; cropDragOffsetStartY = cropOffsetY;
+        e.preventDefault();
+      });
+      window.addEventListener('mousemove', function (e) {
+        if (!cropDragging) return;
+        cropOffsetX = cropDragOffsetStartX + (e.clientX - cropDragStartX);
+        cropOffsetY = cropDragOffsetStartY + (e.clientY - cropDragStartY);
+        drawCrop();
+      });
+      window.addEventListener('mouseup', function () { cropDragging = false; });
+
+      // Touch
+      newCanvas.addEventListener('touchstart', function (e) {
+        if (e.touches.length === 1) {
+          cropDragging = true;
+          cropDragStartX = e.touches[0].clientX; cropDragStartY = e.touches[0].clientY;
+          cropDragOffsetStartX = cropOffsetX; cropDragOffsetStartY = cropOffsetY;
+        }
+        e.preventDefault();
+      }, { passive: false });
+      newCanvas.addEventListener('touchmove', function (e) {
+        if (!cropDragging || e.touches.length !== 1) return;
+        cropOffsetX = cropDragOffsetStartX + (e.touches[0].clientX - cropDragStartX);
+        cropOffsetY = cropDragOffsetStartY + (e.touches[0].clientY - cropDragStartY);
+        drawCrop();
+        e.preventDefault();
+      }, { passive: false });
+      newCanvas.addEventListener('touchend', function () { cropDragging = false; }, { passive: true });
+
+      // Reconnect zoom slider
+      var zoomSlider = document.getElementById('crop-zoom');
+      zoomSlider.oninput = onCropZoom;
+    }
+
+    function applyCrop() {
+      var sz = cropCanvasSize;
+      var cropRadius = sz * 0.42;
+      var outputSize = 400;
+
+      // Create output canvas
+      var out = document.createElement('canvas');
+      out.width = outputSize; out.height = outputSize;
+      var octx = out.getContext('2d');
+
+      // Scale factor from crop canvas to output
+      var ratio = outputSize / (cropShape === 'circle' ? cropRadius * 2 : cropRadius * 2 * 1.42);
+
+      var iw = cropImg.naturalWidth, ih = cropImg.naturalHeight;
+      var scale = (Math.min(sz, sz) / Math.min(iw, ih)) * cropZoom;
+      var dw = iw * scale, dh = ih * scale;
+      var dx = (sz - dw) / 2 + cropOffsetX;
+      var dy = (sz - dh) / 2 + cropOffsetY;
+
+      // Clip to shape
+      octx.save();
+      if (cropShape === 'circle') {
+        octx.beginPath();
+        octx.arc(outputSize / 2, outputSize / 2, outputSize / 2, 0, Math.PI * 2);
+        octx.clip();
+      }
+
+      // Calculate source region
+      var cropLeft = sz / 2 - cropRadius * (cropShape === 'circle' ? 1 : 1.42);
+      var cropTop = sz / 2 - cropRadius * (cropShape === 'circle' ? 1 : 1.42);
+      var cropW = cropRadius * (cropShape === 'circle' ? 2 : 2.84);
+
+      // Map image position to output
+      var odx = (dx - cropLeft) * (outputSize / cropW);
+      var ody = (dy - cropTop) * (outputSize / cropW);
+      var odw = dw * (outputSize / cropW);
+      var odh = dh * (outputSize / cropW);
+
+      octx.drawImage(cropImg, odx, ody, odw, odh);
+      octx.restore();
+
+      var dataURL = out.toDataURL('image/jpeg', 0.9);
+      goToDPStep3(dataURL);
     }
 
     function saveDPPhoto() {
-      if (!pendingDPBase64) { showToast('Pehle photo choose karo', 'error'); return; }
-      showToast('Photo upload ho rahi hai...', 'success');
-      var formData = new FormData(); var blob = b64toBlob(pendingDPBase64, pendingDPMime); formData.append('image', blob);
-      fetch('https://api.imgur.com/3/image', { method: 'POST', headers: { 'Authorization': 'Client-ID 546c25a59c58ad7' }, body: formData })
-        .then(function (r) { return r.json(); })
-        .then(function (data) {
-          if (data.data && data.data.link) {
-            var link = data.data.link; if (currentUser) { currentUser.dpUrl = link; localStorage.setItem('kiranaUser', JSON.stringify(currentUser)); saveDPToSheet(link); updateProfileAvatar(link); document.getElementById('dp-modal').classList.remove('open'); showToast('Photo save ho gayi!', 'success'); }
-          } else { if (currentUser) { currentUser.dpUrl = 'data:' + pendingDPMime + ';base64,' + pendingDPBase64; localStorage.setItem('kiranaUser', JSON.stringify(currentUser)); updateProfileAvatar(currentUser.dpUrl); document.getElementById('dp-modal').classList.remove('open'); showToast('Photo locally save ho gayi', 'success'); } }
-        }).catch(function () { if (currentUser) { currentUser.dpUrl = 'data:' + pendingDPMime + ';base64,' + pendingDPBase64; localStorage.setItem('kiranaUser', JSON.stringify(currentUser)); updateProfileAvatar(currentUser.dpUrl); document.getElementById('dp-modal').classList.remove('open'); showToast('Photo locally save ho gayi', 'success'); } });
+      if (!croppedDataURL) { showToast('Pehle photo crop karo', 'error'); return; }
+      if (!currentUser) { showToast('Pehle login karo', 'error'); return; }
+      // Save directly as base64 - reliable, no Imgur needed
+      currentUser.dpUrl = croppedDataURL;
+      localStorage.setItem('kiranaUser', JSON.stringify(currentUser));
+      updateProfileAvatar(croppedDataURL);
+      saveDPToSheet('local_base64');
+      document.getElementById('dp-modal').classList.remove('open');
+      showToast('Photo save ho gayi!', 'success');
     }
 
-    function b64toBlob(b64Data, contentType, sliceSize) { contentType = contentType || ''; sliceSize = sliceSize || 512; var byteCharacters = atob(b64Data); var byteArrays = []; for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) { var slice = byteCharacters.slice(offset, offset + sliceSize); var byteNumbers = new Array(slice.length); for (var i = 0; i < slice.length; i++) byteNumbers[i] = slice.charCodeAt(i); byteArrays.push(new Uint8Array(byteNumbers)); } return new Blob(byteArrays, { type: contentType }); }
-    function saveDPToSheet(url) { postToSheet({ action: 'saveCustomerDP', phone: currentUser.phone, dpUrl: url }); }
-    function removeDPPhoto() { if (currentUser) { currentUser.dpUrl = ''; localStorage.setItem('kiranaUser', JSON.stringify(currentUser)); saveDPToSheet(''); updateProfileAvatar(''); document.getElementById('dp-modal').classList.remove('open'); showToast('Photo hata di gayi', 'success'); } }
+    function saveDPToSheet(url) {
+      if (currentUser) postToSheet({ action: 'saveCustomerDP', phone: currentUser.phone, dpUrl: url });
+    }
+
+    function removeDPPhoto() {
+      if (currentUser) {
+        currentUser.dpUrl = '';
+        localStorage.setItem('kiranaUser', JSON.stringify(currentUser));
+        saveDPToSheet('');
+        updateProfileAvatar('');
+        document.getElementById('dp-modal').classList.remove('open');
+        showToast('Photo hata di gayi', 'success');
+      }
+    }
 
     function updateProfileAvatar(url) {
       var letter = document.getElementById('prof-avatar-letter'); var img = document.getElementById('prof-avatar-img');
@@ -3341,23 +3680,48 @@
     });
     history.pushState(null, '', window.location.href);
 
-    // INIT
+    // ✅ MAIN FIX: window.onload mein sabse pehle modal check
     window.onload = function () {
+      // ✅ STEP 1: Sabse pehle user check karo - KOI DELAY NAHI
       var saved = localStorage.getItem('kiranaUser');
-      if (saved) { currentUser = JSON.parse(saved); document.getElementById('reg-modal').classList.remove('open'); }
+      if (saved) {
+        try {
+          currentUser = JSON.parse(saved);
+          // User logged in hai - modal bilkul mat dikhao
+          var modal = document.getElementById('reg-modal');
+          if (modal) modal.classList.remove('open'); // Ensure hidden
+        } catch (e) {
+          currentUser = null;
+        }
+      }
+
+      // ✅ STEP 2: Agar user nahi hai TO modal dikhao
+      if (!currentUser) {
+        var modal = document.getElementById('reg-modal');
+        if (modal) modal.classList.add('open');
+      }
+
+      // STEP 3: Cart load karo
       var savedCart = localStorage.getItem('kiranaCart');
       if (savedCart) { cart = JSON.parse(savedCart); updateCartBadges(); }
+
+      // STEP 4: Orders load karo
       var savedOrders = localStorage.getItem('kiranaOrders');
       if (savedOrders) orders = JSON.parse(savedOrders);
+
+      // STEP 5: Language set karo
       var savedLang = localStorage.getItem("lang");
       if (savedLang) currentLang = savedLang;
       updateLangButtons(); updateAllUIText();
+
+      // STEP 6: Profile fill karo
       if (currentUser) fillProfileUI();
+
+      // STEP 7: Products load karo
       loadProducts();
       setupScrollBehavior();
     };
 
-    // REGISTRATION
     function registerUser() {
       var name = document.getElementById('reg-name').value.trim(); var phone = document.getElementById('reg-phone').value.trim(); var addr = document.getElementById('reg-addr').value.trim();
       if (!name || !phone || !addr) { showToast('Sabhi fields zaroori hain', 'error'); return; }
@@ -3377,7 +3741,6 @@
       document.getElementById('reg-modal').classList.add('open'); showToast('Logout ho gaye');
     }
 
-    // PROFILE
     function fillProfileUI() {
       if (!currentUser) return;
       var fullName = (currentUser.fname + ' ' + (currentUser.lname || '')).trim();
@@ -3407,7 +3770,6 @@
       navigator.geolocation.getCurrentPosition(function (pos) { document.getElementById('edit-location').value = pos.coords.latitude.toFixed(5) + ', ' + pos.coords.longitude.toFixed(5); btn.textContent = 'Location mil gayi!'; showToast('Location mil gayi!', 'success'); }, function () { btn.textContent = 'Current Location Use Karo'; showToast('Location access nahi mili', 'error'); });
     }
 
-    // TABS
     var STATIC_PAGES = ['about', 'contact', 'privacy', 'terms', 'refund'];
     function showTab(tab) {
       if (tab === 'checkout') { showCheckout(); return; }
@@ -3445,7 +3807,6 @@
       if (tab !== 'chat') window.scrollTo(0, 0);
     }
 
-    // ORDERS REFRESH
     function startOrdersRefresh() {
       stopOrdersRefresh();
       ordersRefreshTimer = setInterval(function () {
@@ -3464,7 +3825,6 @@
     }
     function stopOrdersRefresh() { if (ordersRefreshTimer) { clearInterval(ordersRefreshTimer); ordersRefreshTimer = null; } }
 
-    // PRODUCTS LOAD
     function loadProducts() {
       fetch(CONFIG.SCRIPT_URL + '?action=getProducts')
         .then(function (r) { return r.json(); })
@@ -3536,7 +3896,6 @@
       renderCategories(); renderProducts();
     }
 
-    // SEARCH
     var searchTimeout = null;
     function onSearchInput() {
       var q = document.getElementById('search-input').value;
@@ -3569,7 +3928,6 @@
       catch (e) { alert("Voice search kaam nahi kar raha"); }
     }
 
-    // RENDER PRODUCTS
     function renderProducts() {
       var grid = document.getElementById('products-grid'); if (!grid) return;
       if (!products || !products.length) { grid.innerHTML = '<div class="empty" style="grid-column:1/-1"><i class="fa fa-box-open"></i><h3>Products nahi mile</h3></div>'; return; }
@@ -3591,7 +3949,6 @@
       }).join('');
     }
 
-    // PRODUCT DETAIL
     var galleryCurrentIndex = 0; var galleryImages = [];
     function showProduct(id) {
       currentProductId = id; detailQty = 1;
@@ -3625,7 +3982,6 @@
     function addToCartDetail() { for (var i = 0; i < detailQty; i++) addToCart(currentProductId, false); showToast(detailQty + ' item cart mein dala', 'success'); detailQty = 1; }
     function buyNow() { addToCartDetail(); showTab('cart'); }
 
-    // CART
     function addToCart(id, btn) {
       var ex = cart.find(function (c) { return String(c.id) == String(id); });
       if (ex) { ex.qty++; } else { var p = products.find(function (x) { return x.id == id; }); if (p) cart.push({ id: p.id, name: p.name, name_hi: p.name_hi, name_en: p.name_en, cat: p.cat, desc: p.desc, price: p.price, img: p.img, qty: 1 }); }
@@ -3660,53 +4016,34 @@
         '<div style="height:80px"></div>';
     }
 
-    // ✅ FIXED CHECKOUT - Har baar fresh state se start hoga
     function showCheckout() {
       if (!currentUser) { showToast('Pehle login karo', 'error'); return; }
       if (!cart.length) { showToast('Cart khali hai', 'error'); return; }
-
-      // ✅ FIX: isOrderPlacing reset karo checkout open hone par
       isOrderPlacing = false;
-
       document.querySelectorAll('.page').forEach(function (p) { p.classList.remove('active'); });
       document.getElementById('checkout-page').classList.add('active');
       document.querySelectorAll('.nav-tab').forEach(function (t) { t.classList.remove('active'); });
       document.getElementById('main-top-header').style.display = ''; document.querySelector('.bottom-nav').style.display = ''; document.body.classList.remove('static-page-open');
-
       document.getElementById('co-name').textContent = (currentUser.fname + ' ' + (currentUser.lname || '')).trim();
       document.getElementById('co-phone').textContent = currentUser.phone;
       document.getElementById('co-addr').textContent = currentUser.addr;
-
       renderCheckoutSummary();
-
       var subtotal = cart.reduce(function (s, i) { return s + i.price * i.qty; }, 0);
       var delivery = subtotal >= 99 ? 0 : 20;
       currentCheckoutTotal = subtotal + delivery;
-
-      // ✅ FIX: UPI amount update karo
       var amountEl = document.getElementById('upi-amount-display');
       if (amountEl) amountEl.textContent = '₹' + currentCheckoutTotal;
-
-      // ✅ FIX: Poori UPI state reset karo
       upiAppClicked = false;
       document.querySelectorAll('.upi-app-btn').forEach(function (b) { b.classList.remove('upi-clicked'); });
       var cb = document.getElementById('upi-paid-check'); if (cb) cb.checked = false;
       var doneBox = document.getElementById('upi-done-box'); if (doneBox) doneBox.style.display = 'none';
       var hint = document.getElementById('upi-fail-hint'); if (hint) hint.classList.remove('show');
       var upiIdInput = document.getElementById('upi-id'); if (upiIdInput) upiIdInput.value = '';
-
-      // ✅ FIX: Place button reset karo - fresh state
       var placeBtn = document.getElementById('place-btn');
-      if (placeBtn) {
-        placeBtn.disabled = false;
-        placeBtn.innerHTML = '<i class="fa fa-party-horn"></i> <span id="place-order-txt">' + t('place_order') + '</span>';
-      }
-
-      // ✅ FIX: Payment method reset karo UPI pe
+      if (placeBtn) { placeBtn.disabled = false; placeBtn.innerHTML = '<i class="fa fa-party-horn"></i> <span id="place-order-txt">' + t('place_order') + '</span>'; }
       selectedPayment = 'upi';
       selectPayment('upi');
       renderUPIApps(currentCheckoutTotal, 'PENDING');
-
       window.scrollTo(0, 0);
     }
 
@@ -3720,10 +4057,30 @@
 
     function selectPayment(type) {
       selectedPayment = type;
-      ['cod', 'upi', 'online', 'razorpay'].forEach(function (t) { var el = document.getElementById('pay-' + t); if (el) el.classList.remove('active'); });
-      var activeEl = document.getElementById('pay-' + type); if (activeEl) activeEl.classList.add('active');
-      var upiField = document.getElementById('upi-field'); if (upiField) upiField.style.display = (type === 'upi') ? 'block' : 'none';
-      if (type !== 'upi') upiAppClicked = false;
+
+      // Active class remove sabse
+      ['cod', 'upi', 'online', 'razorpay'].forEach(function (t) {
+        var el = document.getElementById('pay-' + t);
+        if (el) el.classList.remove('active');
+      });
+
+      // Selected pe active add
+      var activeEl = document.getElementById('pay-' + type);
+      if (activeEl) activeEl.classList.add('active');
+
+      // UPI field show/hide
+      var upiField = document.getElementById('upi-field');
+      if (upiField) {
+        upiField.style.display = (type === 'upi') ? 'block' : 'none';
+      }
+
+      // 🔥 IMPORTANT FIX (tumhara new code yahin add hoga)
+      if (type !== 'upi') {
+        upiAppClicked = false;
+
+        var cb = document.getElementById('upi-paid-check');
+        if (cb) cb.checked = false;
+      }
     }
 
     function handleRazorpay(btn) {
@@ -3735,54 +4092,34 @@
       var rzp = new Razorpay(options); rzp.open();
     }
 
-    // ✅ FULLY FIXED placeOrder - Multiple orders bina refresh ke kaam karenge
     function placeOrder() {
-      // ✅ FIX 1: Agar already placing hai to duplicate mat karo
-      if (isOrderPlacing) {
-        showToast('Order place ho raha hai, thoda wait karo...', 'error');
-        return;
-      }
-
+      if (isOrderPlacing) { showToast('Order place ho raha hai, thoda wait karo...', 'error'); return; }
       var btn = document.getElementById('place-btn');
 
-      // ✅ FIX 2: UPI check
+      // UPI: pehle app click aur checkbox check karo
       if (selectedPayment === 'upi') {
         if (!upiAppClicked) { showToast('Pehle koi UPI app select karo', 'error'); return; }
         var cb = document.getElementById('upi-paid-check');
         if (!cb || !cb.checked) { showToast('Payment ke baad checkbox tick karo', 'error'); return; }
       }
 
-      // ✅ FIX 3: Razorpay
+      // Razorpay: gateway open karo
       if (selectedPayment === 'razorpay') { handleRazorpay(btn); return; }
 
-      // ✅ FIX 4: Cart dobara check karo
+      // COD / Card / Online: seedha neeche order lagao — koi extra check nahi
       if (!cart.length) { showToast('Cart khali hai, pehle items dalo', 'error'); return; }
-
-      // ✅ FIX 5: Lock lagao
       isOrderPlacing = true;
-
       btn.innerHTML = '<div class="spinner" style="width:20px;height:20px;border-width:2px"></div> Order ho raha hai...';
       btn.disabled = true;
-
       var subtotal = cart.reduce(function (s, i) { return s + i.price * i.qty; }, 0);
       var delivery = subtotal >= 99 ? 0 : 20;
       var orderId = 'ORD-' + Math.floor(1000000 + Math.random() * 9000000);
       currentOrderId = orderId;
       var fullName = (currentUser.fname + ' ' + (currentUser.lname || '')).trim();
-
       var order = {
-        id: orderId,
-        date: new Date().toLocaleString('en-IN'),
-        customer: fullName,
-        phone: currentUser.phone,
-        addr: currentUser.addr,
+        id: orderId, date: new Date().toLocaleString('en-IN'), customer: fullName, phone: currentUser.phone, addr: currentUser.addr,
         items: cart.map(function (i) { return { name: i.name, name_hi: i.name_hi, name_en: i.name_en, cat: i.cat, qty: i.qty, price: i.price, total: i.price * i.qty }; }),
-        subtotal: subtotal,
-        delivery: delivery,
-        total: subtotal + delivery,
-        payment: selectedPayment,
-        status: 'processing',
-        isNew: true,
+        subtotal: subtotal, delivery: delivery, total: subtotal + delivery, payment: selectedPayment, status: 'processing', isNew: true,
         timeline: [
           { key: 'order_placed', time: new Date().toLocaleString('en-IN'), done: true, active: false },
           { key: 'confirmed', time: 'pending', done: false, active: true },
@@ -3791,30 +4128,16 @@
           { key: 'delivered', time: 'pending', done: false, active: false }
         ]
       };
-
-      // ✅ FIX 6: Orders array mein add karo
       orders.unshift(order);
       localStorage.setItem('kiranaOrders', JSON.stringify(orders));
-
-      // ✅ FIX 7: Sheet pe save karo
       postToSheet({ action: 'saveOrder', order: order });
-
-      // ✅ FIX 8: Cart clear karo - IMPORTANT
       cart = [];
       localStorage.setItem('kiranaCart', JSON.stringify(cart));
       updateCartBadges();
-
-      // ✅ FIX 9: Success order ID set karo
       document.getElementById('success-order-id').textContent = orderId;
-
-      // ✅ FIX 10: Lock unlock karo - agle order ke liye
       isOrderPlacing = false;
-
-      // ✅ FIX 11: Button reset karo
       btn.disabled = false;
       btn.innerHTML = '<i class="fa fa-party-horn"></i> <span id="place-order-txt">' + t('place_order') + '</span>';
-
-      // ✅ FIX 12: Success page dikhao
       showTab('success');
     }
 
@@ -3829,7 +4152,6 @@
       } else { showToast('Is order ko cancel nahi kar sakte — already ' + statusLower + ' hai', 'error'); }
     }
 
-    // ORDERS
     function getTimeline(status) {
       var base = [{ key: 'order_placed', done: true, active: false }, { key: 'confirmed', done: false, active: false }, { key: 'shipped', done: false, active: false }, { key: 'out_for_delivery', done: false, active: false }, { key: 'delivered', done: false, active: false }];
       var statusLower = (status || "").toLowerCase().trim();
@@ -3890,7 +4212,6 @@
     }
     function closeTrackModal() { document.getElementById('track-modal').classList.remove('open'); if (trackRefreshTimer) { clearInterval(trackRefreshTimer); trackRefreshTimer = null; } }
 
-    // CHAT
     function loadChat() {
       var loginEl = document.getElementById('chat-login-prompt'); var chatEl = document.getElementById('chat-container'); var msgsEl = document.getElementById('chat-messages');
       if (!currentUser) { loginEl.style.display = 'flex'; chatEl.style.display = 'none'; return; }
@@ -3929,7 +4250,6 @@
       fetch(CONFIG.SCRIPT_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify({ action: 'saveChat', phone: currentUser.phone, name: currentUser.fname, text: text }) }).then(function (res) { return res.json(); }).then(function (data) { if (data.success) setTimeout(loadChat, 1000); }).catch(function () { fetch(CONFIG.SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify({ action: 'saveChat', phone: currentUser.phone, name: currentUser.fname, text: text }) }); });
     }
 
-    // HELPERS
     function postToSheet(data) { if (!CONFIG.SCRIPT_URL) return; fetch(CONFIG.SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify(data) }).catch(function (e) { console.log('Sheet error:', e); }); }
     function showToast(msg, type) { var el = document.getElementById('toast'); el.innerHTML = msg; el.className = 'toast ' + (type || '') + ' show'; setTimeout(function () { el.classList.remove('show'); }, 2500); }
 
@@ -3940,15 +4260,8 @@
     function openMenu() { document.getElementById('hamburger-menu').classList.add('open'); document.getElementById('menu-overlay').classList.add('show'); }
     function closeMenu() { document.getElementById('hamburger-menu').classList.remove('open'); document.getElementById('menu-overlay').classList.remove('show'); }
 
-    /**
-     * Rakesh Mart — Content Protection Script (Upgraded)
-     * Covers: images, text, right-click, long-press, keyboard shortcuts,
-     *         drag-drop, clipboard, dev tools, screenshot overlay (CSS)
-     */
     (function () {
       'use strict';
-
-      /* ─── HELPERS ─────────────────────────────────────────────── */
       function isEditable(el) {
         if (!el) return false;
         var tag = (el.tagName || '').toLowerCase();
@@ -3956,211 +4269,53 @@
         if (el.isContentEditable) return true;
         return false;
       }
-
-      function block(e) {
-        if (isEditable(e && e.target)) return;
-        e.preventDefault();
-        e.stopPropagation();
-        return false;
-      }
-
-      /* ─── 1. INJECT CSS ────────────────────────────────────────── */
+      function block(e) { if (isEditable(e && e.target)) return; e.preventDefault(); e.stopPropagation(); return false; }
       var style = document.createElement('style');
       style.textContent = [
-        /* Disable text selection everywhere except inputs */
         '* { -webkit-user-select:none!important; -moz-user-select:none!important; user-select:none!important; }',
         'input,textarea,[contenteditable="true"]{ -webkit-user-select:text!important; user-select:text!important; }',
-
-        /* Disable image dragging */
         'img { -webkit-user-drag:none!important; user-drag:none!important; pointer-events:none!important; }',
-
-        /* Disable image long-press save on iOS/Android */
         'img { -webkit-touch-callout:none!important; }',
-
-        /* Prevent text long-press callout on mobile */
         'body { -webkit-touch-callout:none!important; }',
-
-        /* Keep img visible but non-interactive */
-        '.product-img img, .cart-img img, .offer-img-banner img, .gallery-slide img, .brand-logo-img, .profile-avatar img',
-        '{ pointer-events:none!important; -webkit-user-drag:none!important; }',
-
-        /* Transparent overlay on images so long-press hits the overlay, not the image */
+        '.product-img img, .cart-img img, .offer-img-banner img, .gallery-slide img, .brand-logo-img, .profile-avatar img { pointer-events:none!important; -webkit-user-drag:none!important; }',
         '.img-protect-wrap { position:relative!important; display:inline-block!important; }',
-        '.img-protect-wrap::after {',
-        '  content:"";',
-        '  position:absolute!important;',
-        '  inset:0!important;',
-        '  z-index:99!important;',
-        '  background:transparent!important;',
-        '  pointer-events:all!important;',
-        '  -webkit-user-select:none!important;',
-        '  user-select:none!important;',
-        '}'
+        '.img-protect-wrap::after { content:""; position:absolute!important; inset:0!important; z-index:99!important; background:transparent!important; pointer-events:all!important; -webkit-user-select:none!important; user-select:none!important; }'
       ].join('\n');
       document.head.appendChild(style);
-
-      /* ─── 2. WRAP IMAGES with transparent overlay ─────────────── */
-      function wrapImages() {
-        document.querySelectorAll('img').forEach(function (img) {
-          if (img.dataset.protected) return;
-          img.dataset.protected = '1';
-
-          /* Remove src on right-click / long-press  — re-add on load */
-          img.setAttribute('draggable', 'false');
-          img.setAttribute('oncontextmenu', 'return false');
-
-          /* If parent is not already wrapped */
-          var parent = img.parentElement;
-          if (parent && !parent.classList.contains('img-protect-wrap')) {
-            var wrapper = document.createElement('span');
-            wrapper.className = 'img-protect-wrap';
-            parent.insertBefore(wrapper, img);
-            wrapper.appendChild(img);
-          }
-        });
-      }
-
-      /* Run now + observe DOM changes (dynamic products) */
+      function wrapImages() { document.querySelectorAll('img').forEach(function (img) { if (img.dataset.protected) return; img.dataset.protected = '1'; img.setAttribute('draggable', 'false'); img.setAttribute('oncontextmenu', 'return false'); var parent = img.parentElement; if (parent && !parent.classList.contains('img-protect-wrap')) { var wrapper = document.createElement('span'); wrapper.className = 'img-protect-wrap'; parent.insertBefore(wrapper, img); wrapper.appendChild(img); } }); }
       wrapImages();
       var imgObserver = new MutationObserver(function () { wrapImages(); });
       imgObserver.observe(document.body, { childList: true, subtree: true });
-
-      /* ─── 3. CONTEXT MENU (right-click / long-press menu) ─────── */
       document.addEventListener('contextmenu', block, true);
-
-      /* ─── 4. TEXT SELECTION ────────────────────────────────────── */
       document.addEventListener('selectstart', block, true);
-
-      document.addEventListener('selectionchange', function () {
-        try {
-          var sel = window.getSelection();
-          if (!sel || sel.isCollapsed) return;
-          var node = sel.anchorNode;
-          if (node && node.nodeType === 3) node = node.parentNode;
-          if (isEditable(node)) return;
-          sel.removeAllRanges();
-        } catch (_) { }
-      }, true);
-
-      /* Periodic cleanup for stubborn selections */
-      setInterval(function () {
-        try {
-          var sel = window.getSelection();
-          if (sel && !sel.isCollapsed) {
-            var node = sel.anchorNode;
-            if (node && node.nodeType === 3) node = node.parentNode;
-            if (!isEditable(node)) sel.removeAllRanges();
-          }
-        } catch (_) { }
-      }, 200);
-
-      /* ─── 5. DRAG & DROP ───────────────────────────────────────── */
+      document.addEventListener('selectionchange', function () { try { var sel = window.getSelection(); if (!sel || sel.isCollapsed) return; var node = sel.anchorNode; if (node && node.nodeType === 3) node = node.parentNode; if (isEditable(node)) return; sel.removeAllRanges(); } catch (_) { } }, true);
+      setInterval(function () { try { var sel = window.getSelection(); if (sel && !sel.isCollapsed) { var node = sel.anchorNode; if (node && node.nodeType === 3) node = node.parentNode; if (!isEditable(node)) sel.removeAllRanges(); } } catch (_) { } }, 200);
       document.addEventListener('dragstart', block, true);
       document.addEventListener('drag', block, true);
       document.addEventListener('drop', block, true);
-
-      /* ─── 6. CLIPBOARD ─────────────────────────────────────────── */
-      ['copy', 'cut', 'paste'].forEach(function (ev) {
-        document.addEventListener(ev, function (e) {
-          if (isEditable(e.target)) return;
-          e.preventDefault();
-          e.stopPropagation();
-        }, true);
-      });
-
-      /* ─── 7. KEYBOARD SHORTCUTS ────────────────────────────────── */
+      ['copy', 'cut', 'paste'].forEach(function (ev) { document.addEventListener(ev, function (e) { if (isEditable(e.target)) return; e.preventDefault(); e.stopPropagation(); }, true); });
       document.addEventListener('keydown', function (e) {
         if (isEditable(document.activeElement)) return;
-
-        var k = (e.key || '').toLowerCase();
-        var ctrl = e.ctrlKey || e.metaKey;
-        var shift = e.shiftKey;
-        var alt = e.altKey;
-
-        /* F12 — DevTools */
+        var k = (e.key || '').toLowerCase(); var ctrl = e.ctrlKey || e.metaKey;
         if (e.keyCode === 123) { e.preventDefault(); return false; }
-
-        /* PrintScreen */
         if (k === 'printscreen') { e.preventDefault(); return false; }
-
-        /* Ctrl/Cmd combos */
-        if (ctrl) {
-          var blocked = ['c', 'x', 'v', 'u', 's', 'a', 'p', 'j', 'i', 'f', 'k', 'e', 'h', 'g'];
-          if (blocked.indexOf(k) !== -1) { e.preventDefault(); return false; }
-        }
-
-        /* Ctrl+Shift combos */
-        if (ctrl && shift && ['i', 'j', 'c', 'k', 'e', 'n'].indexOf(k) !== -1) {
-          e.preventDefault(); return false;
-        }
-
-        /* Alt+combos (common in some browsers) */
-        if (alt && ctrl) { e.preventDefault(); return false; }
+        if (ctrl) { var blocked = ['c', 'x', 'v', 'u', 's', 'a', 'p', 'j', 'i', 'f', 'k', 'e', 'h', 'g']; if (blocked.indexOf(k) !== -1) { e.preventDefault(); return false; } }
+        if (ctrl && e.shiftKey && ['i', 'j', 'c', 'k', 'e', 'n'].indexOf(k) !== -1) { e.preventDefault(); return false; }
       }, true);
-
-      /* ─── 8. LONG-PRESS on images (mobile) ─────────────────────── */
-      var longPressTimer = null;
-      var LONG_PRESS_MS = 500;
-
-      document.addEventListener('touchstart', function (e) {
-        var target = e.target;
-        if (target && (target.tagName === 'IMG' || target.closest('img, .img-protect-wrap'))) {
-          longPressTimer = setTimeout(function () {
-            e.preventDefault();
-          }, LONG_PRESS_MS);
-        }
-      }, { passive: false, capture: true });
-
-      document.addEventListener('touchend', function () {
-        if (longPressTimer) { clearTimeout(longPressTimer); longPressTimer = null; }
-      }, true);
-
-      document.addEventListener('touchmove', function () {
-        if (longPressTimer) { clearTimeout(longPressTimer); longPressTimer = null; }
-      }, true);
-
-      /* ─── 9. POINTER EVENTS on images ──────────────────────────── */
-      /* Extra safety: block pointerdown on images to kill browser save-dialog */
-      document.addEventListener('pointerdown', function (e) {
-        if (e.target && e.target.tagName === 'IMG') {
-          e.preventDefault();
-        }
-      }, { capture: true, passive: false });
-
-      /* ─── 10. DEVTOOLS DETECTION (basic size-change trick) ─────── */
-      (function devToolsBlock() {
-        var threshold = 160;
-        setInterval(function () {
-          if (
-            window.outerWidth - window.innerWidth > threshold ||
-            window.outerHeight - window.innerHeight > threshold
-          ) {
-            /* DevTools open — you can redirect or show a warning here */
-            /* document.body.innerHTML = '<h2 style="text-align:center;margin-top:40vh">Please close developer tools.</h2>'; */
-            /* Uncomment above line if you want to block the page when DevTools is open */
-          }
-        }, 1000);
-      })();
-
-      /* ─── 11. MOUSE UP CLEANUP ─────────────────────────────────── */
-      ['mouseup', 'touchend'].forEach(function (ev) {
-        document.addEventListener(ev, function (e) {
-          if (isEditable(e.target)) return;
-          try {
-            var sel = window.getSelection();
-            if (sel) sel.removeAllRanges();
-          } catch (_) { }
-        }, true);
-      });
-
-      /* ─── 12. DISABLE PRINT (Ctrl+P) already done above ────────── */
-      /* window.onbeforeprint is another hook if needed */
+      var longPressTimer = null; var LONG_PRESS_MS = 500;
+      document.addEventListener('touchstart', function (e) { var target = e.target; if (target && (target.tagName === 'IMG' || target.closest('img, .img-protect-wrap'))) { longPressTimer = setTimeout(function () { e.preventDefault(); }, LONG_PRESS_MS); } }, { passive: false, capture: true });
+      document.addEventListener('touchend', function () { if (longPressTimer) { clearTimeout(longPressTimer); longPressTimer = null; } }, true);
+      document.addEventListener('touchmove', function () { if (longPressTimer) { clearTimeout(longPressTimer); longPressTimer = null; } }, true);
+      document.addEventListener('pointerdown', function (e) { if (e.target && e.target.tagName === 'IMG') { e.preventDefault(); } }, { capture: true, passive: false });
+      ['mouseup', 'touchend'].forEach(function (ev) { document.addEventListener(ev, function (e) { if (isEditable(e.target)) return; try { var sel = window.getSelection(); if (sel) sel.removeAllRanges(); } catch (_) { } }, true); });
       window.onbeforeprint = function () { return false; };
-
     })();
+
+    document.getElementById("prof-avatar-box").addEventListener("click", function () {
+      openDPModal();
+    });
   </script>
 
-  <!-- PWA Install Script -->
   <script src="pwa-install.js" defer></script>
 </body>
 
